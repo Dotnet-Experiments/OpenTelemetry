@@ -1,0 +1,47 @@
+apiVersion: 1
+
+datasources:
+  - name: Loki
+    type: loki
+    access: proxy
+    uid: loki
+    url: http://loki:3100
+    jsonData:
+      logLabels:
+        - datasourceUid: tempo
+          matcherRegex: '^.*?"TraceId":"(\w+)".*$'
+          name: TraceId
+          url: '$${__value.raw}'
+        
+      derivedFields:
+        - datasourceUid: tempo
+          matcherRegex: '^.*?"TraceId":"(\w+)".*$'
+          name: TraceId
+          url: '$${__value.raw}'
+
+  - name: Tempo
+    type: tempo
+    access: proxy
+    uid: tempo
+    url: http://tempo:3200
+    jsonData:
+      nodeGraph:
+        enabled: true
+
+      tracesToLogs:
+        datasourceUid: loki
+        filterByTraceID: false
+        spanEndTimeShift: "500ms"
+        spanStartTimeShift: "-500ms"
+        tags: ['app']
+
+      serviceMap:
+        datasourceUid: prometheus
+
+  - name: Prometheus
+    type: prometheus
+    uid: prometheus
+    url: http://prometheus:9090
+    jsonData:
+      httpMethod: GET
+    version: 1
