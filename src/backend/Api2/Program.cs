@@ -1,3 +1,6 @@
+using Api2;
+using Api2.Entities;
+using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -41,6 +44,10 @@ builder.Services.AddOpenTelemetryTracing(b =>
     b.AddSqlClientInstrumentation();
 });
 
+builder.Services.AddDbContext<WeatherDbContext>(options => 
+    options.UseSqlServer("Server=sqlserver;Database=TestDb;User Id=sa; Password=Test@12345"));            
+builder.Services.AddAutoMapper(typeof(Program)); 
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -68,3 +75,4 @@ app.Run();
 
 // GET http://192.168.64.6/WeatherForecast
 // Traceparent: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
+// Traceparent: 00-8652a752089f33e2659dff28d683a18f-7359b90f4355cfd9-01
