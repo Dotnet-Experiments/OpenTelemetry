@@ -48,12 +48,12 @@ services:
   ####################################################
   # demo app frontend
   ####################################################
-  webapp:
-    build: ./src/frontend/web-app
-    ports:
-      - "8090:80"
-    depends_on:
-      - api1
+  # webapp:
+  #   build: ./src/frontend/web-app
+  #   ports:
+  #     - "8090:80"
+  #   depends_on:
+  #     - api1
 
   ####################################################
   # demo app backend

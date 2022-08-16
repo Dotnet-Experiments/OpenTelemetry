@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using System.Text.Json;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api1.Controllers;
@@ -23,6 +24,7 @@ public class WeatherForecastController : ControllerBase
     }
 
     [HttpGet(Name = "GetWeatherForecast")]
+    [EnableCors("Policy1")]
     public async Task<IEnumerable<WeatherForecast>?> Get()
     {
         _logger.LogInformation("Request started");
