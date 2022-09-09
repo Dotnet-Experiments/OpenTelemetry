@@ -1,5 +1,7 @@
 using Api2;
+using Api2.Constants;
 using AutoMapper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 using Models = Api2.Models;
@@ -30,6 +32,7 @@ public class WeatherForecastController : ControllerBase
     }
 
     [HttpGet(Name = "GetWeatherForecast")]
+    [EnableCors(ApiConstants.CorsPolicy)]
     public IEnumerable<Models.WeatherForecast> Get()
     {
         _logger.LogInformation("Request started");

@@ -1,4 +1,5 @@
 using Api2;
+using Api2.Constants;
 using Api2.Entities;
 using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Exporter;
@@ -44,6 +45,19 @@ builder.Services.AddOpenTelemetryTracing(b =>
     b.AddSqlClientInstrumentation();
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(ApiConstants.CorsPolicy,
+        policy =>
+        {
+            policy
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+
+        });
+});
+
 builder.Services.AddDbContext<WeatherDbContext>(options => 
     options.UseSqlServer("Server=sqlserver;Database=TestDb;User Id=sa; Password=Test@12345"));            
 builder.Services.AddAutoMapper(typeof(Program)); 
@@ -66,6 +80,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(ApiConstants.CorsPolicy);
 
 app.UseAuthorization();
 

@@ -1,0 +1,1 @@
+export const TracingServiceName = "web-app";

@@ -25,6 +25,12 @@ services:
       - "4318:4318"
     volumes:
       - "${PWD}/agent/config.yaml:/etc/agent/agent.yaml"
+  agent-proxy:
+    build: ./agent-proxy
+    ports:
+      - "4418:4418"
+    depends_on:
+      - agent
   loki:
     image: grafana/loki
     ports:
@@ -48,16 +54,17 @@ services:
   ####################################################
   # demo app frontend
   ####################################################
-  # webapp:
-  #   build: ./src/frontend/web-app
-  #   ports:
-  #     - "8090:80"
-  #   depends_on:
-  #     - api1
+  webapp:
+    build: ./src/frontend/web-app
+    ports:
+      - "8091:8091"
+    depends_on:
+      - api1
 
   ####################################################
   # demo app backend
   ####################################################
+
   api1:
     build: ./src/backend/Api1
     ports:

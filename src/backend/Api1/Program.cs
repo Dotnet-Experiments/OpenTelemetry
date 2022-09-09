@@ -1,3 +1,5 @@
+using Api1.Constants;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -43,10 +45,14 @@ builder.Services.AddOpenTelemetryTracing(b =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("Policy1",
+    options.AddPolicy(ApiConstants.CorsPolicy,
         policy =>
         {
-            policy.WithOrigins("http://localhost");
+            policy
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+
         });
 });
 
@@ -69,7 +75,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors();
+app.UseCors(ApiConstants.CorsPolicy);
 
 app.UseAuthorization();
 

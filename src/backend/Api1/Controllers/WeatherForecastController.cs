@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using System.Text.Json;
+using Api1.Constants;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,24 +25,14 @@ public class WeatherForecastController : ControllerBase
     }
 
     [HttpGet(Name = "GetWeatherForecast")]
-    [EnableCors("Policy1")]
+    [EnableCors(ApiConstants.CorsPolicy)]
     public async Task<IEnumerable<WeatherForecast>?> Get()
     {
         _logger.LogInformation("Request started");
 
-        // TODO: call via a Rest client that exposes the model from Api2
-
         var client = new HttpClient();
-        //client.DefaultRequestHeaders.Accept.Clear();
-        //client.DefaultRequestHeaders.Accept.Add(
-        //    new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-        //client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
-
-        var result = await client.GetAsync("http://api2/WeatherForecast");
-
-        var weatherForecasts = await JsonSerializer.DeserializeAsync<IEnumerable<WeatherForecast>>(await result.Content.ReadAsStreamAsync());
-
+//        client.DefaultRequestHeaders.Add("Origin", "http://api1:8081");
+        var weatherForecasts = await client.GetFromJsonAsync<IEnumerable<WeatherForecast>>("http://api2/WeatherForecast");
         return weatherForecasts;
-
     }
 }
